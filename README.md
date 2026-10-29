@@ -1,5 +1,7 @@
 # GetMoving
 
+远程仓库：https://github.com/a1679423201-droid/GetMoving
+
 Android 应用，Kotlin + Jetpack Compose。当前是 Android Studio 生成的项目模板，业务功能待开发。
 
 ## 环境
