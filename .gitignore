@@ -34,3 +34,6 @@ google-services.json
 
 # Android Profiling
 *.hprof
+
+# 本地平台签名密钥，不入库
+keystore/

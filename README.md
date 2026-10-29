@@ -13,7 +13,7 @@ Android 应用，Kotlin + Jetpack Compose。当前是 Android Studio 生成的�
 | Kotlin | 2.2.10 |
 | Compose BOM | 2026.02.01 |
 | compileSdk / targetSdk | 37 |
-| minSdk | 31 |
+| minSdk | 30 |
 | JDK | 25（由 `gradle/gradle-daemon-jvm.properties` 指定，Gradle 自动解析，缺失时下载） |
 
 Android SDK 路径在 `local.properties`，该文件不入库。
@@ -29,6 +29,20 @@ Android SDK 路径在 `local.properties`，该文件不入库。
 ```
 
 产物：`app/build/outputs/apk/debug/app-debug.apk`
+
+## 在车机上安装
+
+测试机 A21_r（Android 11 / API 30）有两条额外限制：
+
+1. 只接受平台签名。把平台密钥放到 `keystore/platform.jks`（已在 `.gitignore` 中，不入库），构建脚本检测到该文件就会用它签 debug/release；没有该文件时退回默认 debug 签名。
+2. 设备有安装白名单，只放行 `com.bicv.*` 等系统包，第三方包需要先关闭拦截：
+
+```bash
+adb shell setprop persist.sys.block_apk_install 0
+./gradlew installDebug
+```
+
+该属性持久生效，恢复拦截用 `adb shell setprop persist.sys.block_apk_install 1`。
 
 ## 目录
 

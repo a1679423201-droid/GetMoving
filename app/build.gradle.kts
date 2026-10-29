@@ -3,15 +3,28 @@ plugins {
     alias(libs.plugins.kotlin.compose)
 }
 
+val platformKeystore = rootProject.file("keystore/platform.jks")
+
 android {
     namespace = "com.example.getmoving"
     compileSdk {
         version = release(37)
     }
 
+    signingConfigs {
+        if (platformKeystore.exists()) {
+            create("platform") {
+                storeFile = platformKeystore
+                storePassword = "android"
+                keyAlias = "android"
+                keyPassword = "android"
+            }
+        }
+    }
+
     defaultConfig {
         applicationId = "com.example.getmoving"
-        minSdk = 31
+        minSdk = 30
         targetSdk = 37
         versionCode = 1
         versionName = "1.0"
@@ -20,7 +33,15 @@ android {
     }
 
     buildTypes {
+        debug {
+            if (platformKeystore.exists()) {
+                signingConfig = signingConfigs.getByName("platform")
+            }
+        }
         release {
+            if (platformKeystore.exists()) {
+                signingConfig = signingConfigs.getByName("platform")
+            }
             optimization {
                 enable = true
                 packageScope = setOf("androidx.**", "kotlin.**", "kotlinx.**")
