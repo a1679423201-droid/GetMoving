@@ -1,3 +1,46 @@
 <resources>
     <string name="app_name">GetMoving</string>
+
+    <string name="nav_home">首页</string>
+    <string name="nav_history">历史</string>
+    <string name="nav_settings">我的</string>
+
+    <string name="home_today_no_entry">今天还没有记录</string>
+    <string name="home_record_weight">记录体重</string>
+    <string name="home_recent_seven_days">最近 7 天</string>
+    <string name="home_no_recent">还没有记录</string>
+    <string name="home_no_recent_hint">点上面的按钮开始</string>
+    <string name="home_goal_unset">未设置目标体重</string>
+    <string name="home_goal_above">距目标 %1$s</string>
+    <string name="home_goal_below">已低于目标 %1$s</string>
+    <string name="home_goal_reached">已达成目标</string>
+    <string name="home_today_label">今天</string>
+
+    <string name="entry_title">记录体重</string>
+    <string name="entry_label">体重</string>
+    <string name="entry_unit">kg</string>
+    <string name="action_save">保存</string>
+
+    <string name="weight_error_empty">请输入体重</string>
+    <string name="weight_error_not_a_number">请输入数字</string>
+    <string name="weight_error_too_many_decimals">最多一位小数</string>
+    <string name="weight_error_out_of_range">请输入 20.0–300.0 kg</string>
+    <string name="weight_error_save_failed">保存失败，请重试</string>
+
+    <string name="backfill_tag">补记</string>
+
+    <string name="history_title">历史</string>
+    <string name="history_empty">还没有历史记录</string>
+    <string name="history_empty_hint">记录体重后会在这里显示趋势</string>
+
+    <string name="settings_title">我的</string>
+    <string name="settings_goal">目标体重</string>
+    <string name="settings_reminders">提醒</string>
+    <string name="settings_data">数据</string>
+    <string name="settings_export">导出数据</string>
+    <string name="settings_import">导入数据</string>
+    <string name="settings_about">关于</string>
+    <string name="settings_about_body">GetMoving 1.0\n数据仅存本机，不上传</string>
+    <string name="settings_value_unset">未设置</string>
+    <string name="settings_value_todo">未实现</string>
 </resources>

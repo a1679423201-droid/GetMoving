@@ -2,7 +2,7 @@
 
 远程仓库：https://github.com/a1679423201-droid/GetMoving
 
-Android 应用，Kotlin + Jetpack Compose。当前是 Android Studio 生成的项目模板，业务功能待开发。
+Android 应用，Kotlin + Jetpack Compose。当前完成阶段 1 工程骨架：Hilt、Room、DataStore、Navigation 3、Material 3 主题和三 Tab 首页；FR-1 的基础「记录今天体重」已能工作。
 
 ## 环境
 
@@ -10,53 +10,58 @@ Android 应用，Kotlin + Jetpack Compose。当前是 Android Studio 生成的�
 | --- | --- |
 | Gradle | 9.6.0（wrapper） |
 | Android Gradle Plugin | 9.4.1 |
-| Kotlin | 2.2.10 |
+| Kotlin | 2.2.10（AGP 9 内置 Kotlin，不单独应用 kotlin-android） |
+| KSP | 2.3.12 |
 | Compose BOM | 2026.02.01 |
+| Hilt | 2.59.2（AndroidX Hilt 1.4.0） |
+| Room | 2.8.5 |
+| DataStore | 1.3.0 |
+| Navigation 3 | 1.2.0 |
+| kotlinx.serialization | 1.9.0 |
 | compileSdk / targetSdk | 37 |
 | minSdk | 30 |
-| JDK | 25（由 `gradle/gradle-daemon-jvm.properties` 指定，Gradle 自动解析，缺失时下载） |
+| JDK | 25 |
 
-Android SDK 路径在 `local.properties`，该文件不入库。
+## 构建
 
-## 常用命令
+本机需要把 `JAVA_HOME` 指向 Android Studio 自带的 JBR 25，否则 Gradle 会尝试从 foojay 下载 JDK 25，网络受限时会长时间卡住：
 
 ```bash
-./gradlew assembleDebug    # 构建 debug APK
-./gradlew installDebug     # 安装到已连接的设备
-./gradlew test             # 单元测试
-./gradlew connectedAndroidTest  # 仪器测试
-./gradlew lint             # 静态检查
+export JAVA_HOME="/Applications/Android Studio.app/Contents/jbr/Contents/Home"
+./gradlew assembleDebug
+./gradlew test
+./gradlew lint
 ```
 
 产物：`app/build/outputs/apk/debug/app-debug.apk`
 
-## 在车机上安装
-
-测试机 A21_r（Android 11 / API 30）有两条额外限制：
-
-1. 只接受平台签名。把平台密钥放到 `keystore/platform.jks`（已在 `.gitignore` 中，不入库），构建脚本检测到该文件就会用它签 debug/release；没有该文件时退回默认 debug 签名。
-2. 设备有安装白名单，只放行 `com.bicv.*` 等系统包，第三方包需要先关闭拦截：
-
-```bash
-adb shell setprop persist.sys.block_apk_install 0
-./gradlew installDebug
-```
-
-该属性持久生效，恢复拦截用 `adb shell setprop persist.sys.block_apk_install 1`。
+CI 用 GitHub Actions + Temurin 25，见 `.github/workflows/ci.yml`。
 
 ## 目录
 
-- `app/src/main/java/com/example/getmoving/` — 应用代码，入口 `MainActivity.kt`
-- `app/src/main/java/com/example/getmoving/ui/theme/` — Compose 主题
-- `app/src/main/res/` — 资源
+- `app/src/main/java/com/example/getmoving/`
+  - `di/` — Hilt 模块（数据库、DataStore、Clock、Repository 绑定）
+  - `data/` — Room 实体/DAO/数据库、DataStore、Repository 实现
+  - `domain/` — 纯 Kotlin 模型、仓库接口、校验与目标差值规则
+  - `feature/` — 按功能划分的 Compose 页面与 ViewModel
+  - `navigation/` — Navigation 3 的 NavKey、NavDisplay、底部导航
+  - `ui/` — 主题、通用组件、格式化
+- `app/schemas/` — Room schema 导出（迁移用）
 - `gradle/libs.versions.toml` — 依赖版本集中管理
 
-## 关联笔记
+## 文档
 
-需求、设计、决策记录和 AI 提示词放在 `/Users/a11/ymd/MD/Vibe/GetMoving`（Obsidian 库）。代码库只放与代码直接相关的文档。
+- 路线与质量门禁：`/Users/a11/ymd/MD/Vibe/GetMoving/路线与门禁.md`
+- 需求、设计、决策记录：`/Users/a11/ymd/MD/Vibe/GetMoving`
+
+## 当前状态
+
+- 工程骨架完成，`assembleDebug`、`test`、`lint` 通过。
+- 已实现：今日体重新增/覆盖、最近 7 天列表、目标差值展示、3 个底部 Tab、固定青绿主题。
+- 未实现：补录、左滑删除、目标设置 UI、历史趋势、提醒、导出/导入。
 
 ## 待办
 
-- [ ] 确认应用定位与包名（当前为模板占位 `com.example.getmoving`）
-- [ ] 替换模板 `Greeting` 页面，接入首个功能
-- [ ] 应用图标与主题色
+- [ ] 补齐 FR-1 的补录、删除、目标设置
+- [ ] 阶段 1 收尾：包名定稿、分支保护
+- [ ] 按笔记里的需求拆分继续 FR-2 ~ FR-8
